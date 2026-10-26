@@ -724,9 +724,7 @@ class Schema(object):
                         priority == COMPARABLE
                         for priority in [_priority(value) for value in s.args]
                     ):
-                        or_values = [
-                            str(s) if isinstance(s, Literal) else s for s in s.args
-                        ]
+                        or_values = [_to_json_type(s) for s in s.args]
                         # All values are simple, can use enum or const
                         if len(or_values) == 1:
                             or_value = or_values[0]
