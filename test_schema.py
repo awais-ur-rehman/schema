@@ -1877,6 +1877,18 @@ def test_json_schema_literal_enum_preserves_value_types(values):
         ]
 
 
+def test_json_schema_literal_enum_serializes_non_json_values():
+    from enum import Enum
+
+    class Choice(Enum):
+        FIRST = "first"
+        SECOND = "second"
+
+    schema = Schema(Or(Literal(Choice.FIRST), Literal(Choice.SECOND)))
+    exported = schema.json_schema("https://example.com")
+    assert json.loads(json.dumps(exported))["enum"] == ["Choice.FIRST", "Choice.SECOND"]
+
+
 def test_json_schema_definitions_and_literals():
     sub_schema = Schema(
         {Literal("sub_key1", description="Sub key 1"): int},
